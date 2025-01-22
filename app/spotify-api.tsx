@@ -101,22 +101,3 @@ export async function refreshAccessToken(
     expires_in,
   };
 }
-
-`export function refreshToken(oldTokenData: TokenData): Promise<TokenData> {
-  return new Promise((resolve, reject) => {
-    // Simulate fetching new token data, e.g., from an API
-    const newAccessToken = "new_generated_access_token"; // This could come from an API response
-    const newRefreshToken = "new_generated_refresh_token";
-    const expiresIn = 3600; // Example: 1 hour in seconds
-
-    if (newAccessToken && newRefreshToken) {
-      resolve({
-        access_token: newAccessToken,
-        refresh_token: newRefreshToken,
-        expires_in: expiresIn,
-      });
-    } else {
-      reject(new Error("Failed to refresh token."));
-    }
-  });
-}`;

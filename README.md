@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Hello!
 
-## Getting Started
+I was struggling to figure out a good way to get authorization, save necessary data in local storage, and refresh tokens when necessary on my own web app. 
+This is my test app that has all that figured out!
 
-First, run the development server:
+# Spotify-API
+This document holds the following functions:
+ - redirect the user to the authorization page (and get auth)
+ - get the token data I wanted (access token, refresh token, expiration time)
+ - refresh a token 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# callback page
+After a user is redirected to the authorization page, it will return you to a specified callback page. On that callback page, an authorization code will be stored in the browser's URL. My getTokenData function grabs that AUTH_CODE and uses it to get the data we need. NOTE: if the page changes before the data is saved, the AUTH_CODE will disappear. So make sure you get that data saved before redirecting the user back to a page. 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+My callback page gets the AUTH_CODE, calls getTokenData, saves the data in local storage, and then redirects the user back to the home page.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+NOTE!!: for testing purposes, it is coded that the access_token expires in 30 seconds. Modify the calculation that saves the expiration time correctly.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+# home page ("/")
+There is a lot that this page does. The functions it contains are: 
+ - checkout: checks if there missing or invalid data, calls handleth
+ - handleth: directs the user through the authentication process
+ - checkAndRefreshTokenIfNeeded: checks when the access token expires. If expires, refresh the token
+ - getData : grabs and returns access_token, refresh_token, expiration_time from local storage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For testing purposes, this page displays the necessary data on the screen. it starts by calling init_data and repeadidly calls init_data every 10 seconds. Since the token thinks it expires every 30 seconds, you should see the access token update over time.  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+With this access token, you can make calls to Spotify API for any data you want. Just remember to update the permission scope as needed. Also remember to put your client id in the api file! 
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Links
+Spotify API: https://developer.spotify.com/documentation/web-api
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+PKCE : https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
+
+Refresh Token: https://developer.spotify.com/documentation/web-api/tutorials/refreshing-tokens
